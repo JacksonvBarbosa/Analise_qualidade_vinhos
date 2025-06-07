@@ -52,6 +52,8 @@ Esses fatores serão utilizados como guia no processo de importação de novos p
 - **Pandas** – Manipulação e limpeza de dados
 - **Matplotlib** – Criação de gráficos
 - **Seaborn** – Visualização estatística e análise gráfica
+- Jupyter Notebook 📓
+- Google Colab
 
 ---
 
