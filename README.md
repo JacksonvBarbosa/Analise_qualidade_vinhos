@@ -1,3 +1,5 @@
+📊 Portfólio de Análise e Ciência de Dados
+
 # 🍷 Análise da Qualidade de Vinhos Tintos Portugueses
 
 **Autor:** Jackson dos Santos Ventura  
