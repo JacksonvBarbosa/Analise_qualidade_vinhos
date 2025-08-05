@@ -1,0 +1,10 @@
+# Dados pesados e sensíveis
+data/raw/
+data/processed/
+data/interim/
+
+# Ambientes
+.env
+*.pyc
+__pycache__/
+.ipynb_checkpoints/
