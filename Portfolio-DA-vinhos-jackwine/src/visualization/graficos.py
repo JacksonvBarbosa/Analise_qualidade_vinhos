@@ -115,3 +115,55 @@ def grafo_boxplot(df: pd.DataFrame, column: str):
     sns.boxplot(x=df[column])
     plt.title(f'Boxplot de {column}')
     plt.show()
+
+def grafo_dist_boxplot(df: pd.DataFrame, colunas: list):
+    '''
+        Gráfico de distribuição e BoxPlot
+
+        Parametro:
+        df: Dataset
+        colunas: lista com os nomes das colunas
+
+        Return:
+        Retorna os gráficos histograma e boxplot
+    '''
+
+    for coluna in colunas:
+        print(f'\n📊 Análise da coluna: {coluna}')
+
+        # Plot da distribuição
+        plt.figure(figsize=(12, 5))
+
+        plt.subplot(1, 2, 1)
+        sns.histplot(df[coluna], kde=True, bins=30, color='purple')
+        plt.title(f'Distribuição - {coluna}')
+
+        plt.subplot(1, 2, 2)
+        sns.boxplot(x=df[coluna], color='blue')
+        plt.title(f'Boxplot - {coluna}')
+
+        plt.tight_layout()
+        plt.show()
+
+def grafo_bloco_boxplot(df: pd.DataFrame, colunas: list):
+    '''
+    Gráficos de BoxPlot encadeados
+
+    Parametro:
+    df: Dataset
+    colunas: lista com os nomes das colunas
+
+    Return:
+    Retorna os gráficos histograma e boxplot
+    '''
+    # Box Plots
+    colunas = []
+
+    plt.figure(figsize=(14, 18))  # aumenta o tamanho para não ficar apertado
+
+    for i, coluna in enumerate(colunas, 1):
+        plt.subplot(6, 2, i)
+        sns.boxplot(x=df[coluna], color='purple')
+        plt.title(f'Boxplot - {coluna}')
+        plt.xlabel('')
+        plt.tight_layout()
