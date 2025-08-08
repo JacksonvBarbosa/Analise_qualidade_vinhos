@@ -35,7 +35,10 @@ def pipeline_clustering(
     print(f"Iniciando pipeline de clustering com modelo: {model_name}")
     
     # 1. Carregar dados
-    df = pd.read_csv(data_path)
+    if isinstance(data_path, str):
+        df = pd.read_csv(data_path)
+    else:
+        df = data_path
     X = df.copy()  # Clustering não tem coluna target
     
     # 2. Pré-processamento

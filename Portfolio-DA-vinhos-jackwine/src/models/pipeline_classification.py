@@ -40,7 +40,10 @@ def pipeline_classification(
     print(f"Iniciando pipeline de classificação com modelo: {model_name}")
     
     # 1. Carregar dados
-    df = extract_csv_processed(data_path)
+    if isinstance(data_path, str):
+        df = pd.read_csv(data_path)
+    else:
+        df = data_path
     X = df.drop(columns=[target_column])
     y = df[target_column]
     
