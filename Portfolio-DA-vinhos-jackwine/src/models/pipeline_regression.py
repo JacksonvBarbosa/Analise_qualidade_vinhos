@@ -79,9 +79,9 @@ def pipeline_regression(
         print(f"  {metric}: {value:.4f}")
     
     # 6. Salvar
-    save_model(model, path="models_storage", name=f"{model_name}_model.pkl")
+    save_model(model, path="../models_storage", name=f"{model_name}_model.pkl")
     if scaler:
-        save_model(scaler, path="models_storage", name=f"{model_name}_scaler.pkl")
+        save_model(scaler, path="../models_storage", name=f"{model_name}_scaler.pkl")
     
     return {
         'model': model,
