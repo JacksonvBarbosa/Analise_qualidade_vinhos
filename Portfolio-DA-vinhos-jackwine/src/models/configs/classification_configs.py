@@ -85,6 +85,18 @@ def get_classification_config(model_name):
                 'l2_leaf_reg': 3,
                 'verbose': False
             }
+        },
+        
+        # --- NOVO MODELO: Decision Tree Classifier ---
+        'tree_classifier': {
+            'import_path': 'sklearn.tree.DecisionTreeClassifier',
+            'params': {
+                'random_state': 42,
+                'max_depth': None,
+                'min_samples_split': 2,
+                'min_samples_leaf': 1,
+                'max_features': None
+            }
         }
     }
     
@@ -97,4 +109,5 @@ def get_classification_config(model_name):
 
 def get_available_classification_models():
     """Retorna lista de modelos de classificação disponíveis"""
-    return ['logistic_regression', 'random_forest', 'xgboost', 'lightgbm', 'catboost']
+    # A lista foi atualizada para incluir o novo modelo
+    return ['logistic_regression', 'random_forest', 'xgboost', 'lightgbm', 'catboost', 'tree_classifier']

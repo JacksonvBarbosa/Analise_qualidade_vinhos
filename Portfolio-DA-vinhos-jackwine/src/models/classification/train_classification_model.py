@@ -22,7 +22,7 @@ def train_model(X, y, model, test_size=0.2, random_state=42, return_data=False):
     
     model.fit(X_train, y_train)
 
-    # retorna todas as variáveis mais o modelo trinado
+    # retorna todas as variáveis mais o modelo treinado
     if return_data:
         return model, X_train, X_test, y_train, y_test
     

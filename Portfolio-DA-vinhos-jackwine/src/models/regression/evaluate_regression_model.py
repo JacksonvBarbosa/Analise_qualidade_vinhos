@@ -10,11 +10,12 @@ def evaluate_regression(y_true, y_pred):
     MSE (Erro quadrático médio) — penaliza mais erros grandes.
     R2 (Coeficiente de determinação) — mede o quão bem o modelo explica a variância.
     '''
+    mse = mean_squared_error(y_true, y_pred)
 
     return {
         "MAE": mean_absolute_error(y_true, y_pred),
-        "MSE": mean_squared_error(y_true, y_pred),
+        "MSE": mse,
         "R2": r2_score(y_true, y_pred),
-        "RMSE": mean_squared_error(y_true, y_pred, squared=False),
+        "RMSE": np.sqrt(mse),
         "MAPE": np.mean(np.abs((y_true - y_pred) / y_true)) * 100
     }

@@ -33,15 +33,15 @@ class ModelFactory:
         Returns:
             Modelo instanciado
         """
-        config = get_classification_config(model_name)
+        config = get_classification_config(model_name) # busca import_path e params
         model_class = ModelFactory._import_class(config['import_path'])
         
         # Usar parâmetros customizados se fornecidos
-        params = config['params'].copy()
+        params = config['params'].copy()  # pega os parâmetros padrão
         if custom_params:
-            params.update(custom_params)
+            params.update(custom_params) # substitui/insere parâmetros customizados
             
-        return model_class(**params)
+        return model_class(**params) # retorna a instância do modelo
     
     @staticmethod
     def create_regression_model(model_name, custom_params=None):

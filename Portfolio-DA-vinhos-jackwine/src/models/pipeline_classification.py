@@ -5,10 +5,11 @@ Pipeline de classificação usando lazy loading.
 import pandas as pd
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from src.models.model_factory import ModelFactory
-from src.models.classification.train_classification_model import train_classification_model
-from src.models.classification.predict_classification_model import predict_classification_model
-from src.models.classification.evaluate_classification_model import evaluate_classification_model
-from src.models.save_load_model import save_load_model
+from src.models.classification.train_classification_model import train_model
+from src.models.classification.predict_classification_model import predict
+from src.models.classification.evaluate_classification_model import evaluate_classification
+from src.etl.extract import extract_csv_processed
+from src.models.save_load_model import save_model
 
 
 def pipeline_classification(
@@ -17,7 +18,9 @@ def pipeline_classification(
     model_name='random_forest',  # Nome do modelo, não a instância
     custom_params=None,          # Parâmetros customizados
     scale_type=None,
-    test_size=0.2
+    test_size=0.2,
+    return_data=False,
+    avarage='binary'
 ):
     """
     Pipeline de classificação com lazy loading.
@@ -37,7 +40,7 @@ def pipeline_classification(
     print(f"Iniciando pipeline de classificação com modelo: {model_name}")
     
     # 1. Carregar dados
-    df = pd.read_csv(data_path)
+    df = extract_csv_processed(data_path)
     X = df.drop(columns=[target_column])
     y = df[target_column]
     
@@ -58,22 +61,27 @@ def pipeline_classification(
     print(f"Modelo {model_name} criado com sucesso!")
     
     # 4. Treinar
-    model, X_train, X_test, y_train, y_test = train_classification_model(
-        X, y, model=model, test_size=test_size
+    model, X_train, X_test, y_train, y_test = train_model(
+        X, y, model=model, test_size=test_size, return_data=return_data
     )
     
     # 5. Predições e avaliação
-    y_pred = predict_classification_model(model, X_test)
-    metrics = evaluate_classification_model(y_test, y_pred)
+    y_pred = predict(model, X_test)
+    metrics = evaluate_classification(y_test, y_pred, average=avarage)
     
-    print("Métricas:")
+    print("\nMétricas:")
     for metric, value in metrics.items():
-        print(f"  {metric}: {value:.4f}")
+        if isinstance(value, list):
+            print(f"  {metric}:")
+            for row in value:
+                print(f"    {row}")
+        else:
+            print(f"  {metric}: {value:.4f}")
     
     # 6. Salvar
-    save_load_model(model, path="models_storage", name=f"{model_name}_model.pkl")
+    save_model(model, path="models_storage", name=f"{model_name}_model.pkl")
     if scaler:
-        save_load_model(scaler, path="models_storage", name=f"{model_name}_scaler.pkl")
+        save_model(scaler, path="models_storage", name=f"{model_name}_scaler.pkl")
     
     return {
         'model': model,

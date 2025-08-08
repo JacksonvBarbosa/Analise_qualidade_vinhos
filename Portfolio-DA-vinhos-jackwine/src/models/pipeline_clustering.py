@@ -5,10 +5,10 @@ Pipeline de clustering usando lazy loading.
 import pandas as pd
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from src.models.model_factory import ModelFactory
-from src.models.clustering.train_clustering import train_clustering_model
-from src.models.clustering.predict_clustering import predict_clustering_model
-from src.models.clustering.evaluate_clustering import evaluate_clustering_model
-from src.models.save_load_model import save_load_model
+from src.models.clustering.train_clustering import train_clustering
+from src.models.clustering.predict_clustering import predict
+from src.models.clustering.evaluate_clustering import evaluate_clustering
+from src.models.save_load_model import save_model
 
 
 def pipeline_clustering(
@@ -67,20 +67,20 @@ def pipeline_clustering(
     print(f"Modelo {model_name} criado com sucesso!")
     
     # 5. Treinar
-    model, X_train = train_clustering_model(X, model=model)
+    model, X_train = train_clustering(X, model=model)
     
     # 6. Predições e avaliação
-    y_pred = predict_clustering_model(model, X_train)
-    metrics = evaluate_clustering_model(X_train, y_pred)
+    y_pred = predict(model, X_train)
+    metrics = evaluate_clustering(X_train, y_pred)
     
     print("Métricas:")
     for metric, value in metrics.items():
         print(f"  {metric}: {value:.4f}")
     
     # 7. Salvar
-    save_load_model(model, path="models_storage", name=f"{model_name}_model.pkl")
+    save_model(model, path="models_storage", name=f"{model_name}_model.pkl")
     if scaler:
-        save_load_model(scaler, path="models_storage", name=f"{model_name}_scaler.pkl")
+        save_model(scaler, path="models_storage", name=f"{model_name}_scaler.pkl")
     
     return {
         'model': model,

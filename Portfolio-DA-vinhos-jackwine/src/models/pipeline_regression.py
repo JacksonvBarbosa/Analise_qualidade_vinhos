@@ -5,10 +5,11 @@ Pipeline de regressão usando lazy loading.
 import pandas as pd
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from src.models.model_factory import ModelFactory
-from src.models.regression.train_regression import train_regression_model
-from src.models.regression.predict_regression import predict_regression_model
-from src.models.regression.evaluate_regression import evaluate_regression_model
-from src.models.save_load_model import save_load_model
+from src.models.regression.train_regression_model import train_model
+from src.models.regression.predict_regression_model import predict
+from src.models.regression.evaluate_regression_model import evaluate_regression
+from src.etl.extract import extract_csv_processed
+from src.models.save_load_model import save_model
 
 
 def pipeline_regression(
@@ -17,7 +18,8 @@ def pipeline_regression(
     model_name='linear_regression',  # Nome do modelo, não a instância
     custom_params=None,              # Parâmetros customizados
     scale_type=None,                 # 'standard', 'minmax' ou None
-    test_size=0.2
+    test_size=0.2,
+    return_data=False
 ):
     """
     Pipeline de regressão com lazy loading.
@@ -37,7 +39,7 @@ def pipeline_regression(
     print(f"Iniciando pipeline de regressão com modelo: {model_name}")
     
     # 1. Carregar dados
-    df = pd.read_csv(data_path)
+    df = extract_csv_processed(data_path)
     X = df.drop(columns=[target_column])
     y = df[target_column]
     
@@ -58,22 +60,22 @@ def pipeline_regression(
     print(f"Modelo {model_name} criado com sucesso!")
     
     # 4. Treinar
-    model, X_train, X_test, y_train, y_test = train_regression_model(
-        X, y, model=model, test_size=test_size
+    model, X_train, X_test, y_train, y_test = train_model(
+        X, y, model=model, test_size=test_size, return_data=return_data
     )
     
     # 5. Predições e avaliação
-    y_pred = predict_regression_model(model, X_test)
-    metrics = evaluate_regression_model(y_test, y_pred)
+    y_pred = predict(model, X_test)
+    metrics = evaluate_regression(y_test, y_pred)
     
     print("Métricas:")
     for metric, value in metrics.items():
         print(f"  {metric}: {value:.4f}")
     
     # 6. Salvar
-    save_load_model(model, path="models_storage", name=f"{model_name}_model.pkl")
+    save_model(model, path="models_storage", name=f"{model_name}_model.pkl")
     if scaler:
-        save_load_model(scaler, path="models_storage", name=f"{model_name}_scaler.pkl")
+        save_model(scaler, path="models_storage", name=f"{model_name}_scaler.pkl")
     
     return {
         'model': model,
@@ -81,29 +83,3 @@ def pipeline_regression(
         'metrics': metrics,
         'model_name': model_name
     }
-
-
-# Exemplo de uso:
-if __name__ == "__main__":
-    # Uso simples
-    pipeline_regression(
-        data_path="data.csv",
-        target_column="price",
-        model_name="random_forest",
-        scale_type="standard"
-    )
-    
-    # Uso com parâmetros customizados
-    custom_params = {
-        'n_estimators': 200,
-        'max_depth': 10,
-        'min_samples_split': 5
-    }
-    
-    pipeline_regression(
-        data_path="data.csv",
-        target_column="price",
-        model_name="random_forest",
-        custom_params=custom_params,
-        scale_type="standard"
-    )
