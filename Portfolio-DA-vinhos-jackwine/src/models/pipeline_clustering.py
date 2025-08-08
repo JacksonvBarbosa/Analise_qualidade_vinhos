@@ -1,0 +1,128 @@
+"""
+Pipeline de clustering usando lazy loading.
+"""
+
+import pandas as pd
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
+from src.models.model_factory import ModelFactory
+from src.models.clustering.train_clustering import train_clustering_model
+from src.models.clustering.predict_clustering import predict_clustering_model
+from src.models.clustering.evaluate_clustering import evaluate_clustering_model
+from src.models.save_load_model import save_load_model
+
+
+def pipeline_clustering(
+    data_path,
+    model_name='kmeans',      # Nome do modelo, não a instância
+    custom_params=None,       # Parâmetros customizados
+    scale_type=None,          # 'standard', 'minmax' ou None
+    n_clusters=3              # Número de clusters (para modelos que precisam)
+):
+    """
+    Pipeline de clustering com lazy loading.
+    
+    Args:
+        data_path (str): Caminho dos dados
+        model_name (str): Nome do modelo ('kmeans', 'dbscan', 'gaussian_mixture', etc.)
+        custom_params (dict): Parâmetros customizados do modelo
+        scale_type (str): Tipo de escalonamento ('standard', 'minmax', None)
+        n_clusters (int): Número de clusters (usado se não estiver em custom_params)
+        
+    Returns:
+        dict: Resultados do pipeline
+    """
+    
+    print(f"Iniciando pipeline de clustering com modelo: {model_name}")
+    
+    # 1. Carregar dados
+    df = pd.read_csv(data_path)
+    X = df.copy()  # Clustering não tem coluna target
+    
+    # 2. Pré-processamento
+    scaler = None
+    if scale_type == "standard":
+        scaler = StandardScaler()
+        X = scaler.fit_transform(X)
+    elif scale_type == "minmax":
+        scaler = MinMaxScaler()
+        X = scaler.fit_transform(X)
+    
+    # 3. Preparar parâmetros do modelo
+    # Se n_clusters for passado e modelo suportar, adicionar aos custom_params
+    if custom_params is None:
+        custom_params = {}
+    
+    # Adicionar n_clusters se o modelo precisar e não foi especificado
+    if model_name in ['kmeans', 'gaussian_mixture'] and 'n_clusters' not in custom_params and 'n_components' not in custom_params:
+        if model_name == 'kmeans':
+            custom_params['n_clusters'] = n_clusters
+        elif model_name == 'gaussian_mixture':
+            custom_params['n_components'] = n_clusters
+    
+    # 4. Criar modelo usando Factory (LAZY LOADING)
+    model = ModelFactory.create_clustering_model(
+        model_name=model_name, 
+        custom_params=custom_params
+    )
+    print(f"Modelo {model_name} criado com sucesso!")
+    
+    # 5. Treinar
+    model, X_train = train_clustering_model(X, model=model)
+    
+    # 6. Predições e avaliação
+    y_pred = predict_clustering_model(model, X_train)
+    metrics = evaluate_clustering_model(X_train, y_pred)
+    
+    print("Métricas:")
+    for metric, value in metrics.items():
+        print(f"  {metric}: {value:.4f}")
+    
+    # 7. Salvar
+    save_load_model(model, path="models_storage", name=f"{model_name}_model.pkl")
+    if scaler:
+        save_load_model(scaler, path="models_storage", name=f"{model_name}_scaler.pkl")
+    
+    return {
+        'model': model,
+        'scaler': scaler,
+        'metrics': metrics,
+        'model_name': model_name,
+        'predictions': y_pred
+    }
+
+
+# Exemplo de uso:
+if __name__ == "__main__":
+    # Uso simples - K-Means
+    pipeline_clustering(
+        data_path="data.csv",
+        model_name="kmeans",
+        n_clusters=3,
+        scale_type="standard"
+    )
+    
+    # Uso com DBSCAN
+    dbscan_params = {
+        'eps': 0.3,
+        'min_samples': 10
+    }
+    
+    pipeline_clustering(
+        data_path="data.csv",
+        model_name="dbscan",
+        custom_params=dbscan_params,
+        scale_type="standard"
+    )
+    
+    # Uso com Gaussian Mixture
+    gmm_params = {
+        'n_components': 4,
+        'covariance_type': 'full'
+    }
+    
+    pipeline_clustering(
+        data_path="data.csv",
+        model_name="gaussian_mixture",
+        custom_params=gmm_params,
+        scale_type="minmax"
+    )
