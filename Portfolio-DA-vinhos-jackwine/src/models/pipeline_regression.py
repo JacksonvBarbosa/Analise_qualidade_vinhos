@@ -34,6 +34,9 @@ def pipeline_regression(
         
     Returns:
         dict: Resultados do pipeline
+
+    Ler retorno:
+        Inserir o nome da Variável e a coluna ex res['nome col']
     """
     
     print(f"Iniciando pipeline de regressão com modelo: {model_name}")
@@ -84,5 +87,7 @@ def pipeline_regression(
         'model': model,
         'scaler': scaler,
         'metrics': metrics,
-        'model_name': model_name
+        'model_name': model_name,
+        'train_model': [model, X_train, X_test, y_train, y_test],
+        'predict': y_pred
     }

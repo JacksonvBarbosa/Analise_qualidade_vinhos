@@ -30,6 +30,9 @@ def pipeline_clustering(
         
     Returns:
         dict: Resultados do pipeline
+
+    Ler retorno:
+        Inserir o nome da Variável e a coluna ex res['nome col']
     """
     
     print(f"Iniciando pipeline de clustering com modelo: {model_name}")
@@ -94,38 +97,3 @@ def pipeline_clustering(
     }
 
 
-# Exemplo de uso:
-if __name__ == "__main__":
-    # Uso simples - K-Means
-    pipeline_clustering(
-        data_path="data.csv",
-        model_name="kmeans",
-        n_clusters=3,
-        scale_type="standard"
-    )
-    
-    # Uso com DBSCAN
-    dbscan_params = {
-        'eps': 0.3,
-        'min_samples': 10
-    }
-    
-    pipeline_clustering(
-        data_path="data.csv",
-        model_name="dbscan",
-        custom_params=dbscan_params,
-        scale_type="standard"
-    )
-    
-    # Uso com Gaussian Mixture
-    gmm_params = {
-        'n_components': 4,
-        'covariance_type': 'full'
-    }
-    
-    pipeline_clustering(
-        data_path="data.csv",
-        model_name="gaussian_mixture",
-        custom_params=gmm_params,
-        scale_type="minmax"
-    )
