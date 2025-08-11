@@ -1,4 +1,4 @@
-# Análise da Qualidade de Vinhos Tintos Portugueses
+# Análise da Qualidade de Vinhos
 ## Portfólio de Data Analytics | Jackson dos Santos Ventura
 
 ---
@@ -7,32 +7,52 @@
 
 ### Contexto do Projeto
 
-A distribuidora **JACKWine** está expandindo seu catálogo através da importação de vinhos portugueses, com destaque para a marca "Vinho Verde". Como analista de dados da empresa, fui designado para realizar uma análise exploratória dos vinhos tintos, a fim de entender os fatores químicos que influenciam sua qualidade e fornecer insights para o processo de seleção e importação.
+A distribuidora **JACKWine** está expandindo seu catálogo através da importação de vinhos portugueses. Como analista de dados da empresa, realizei uma análise exploratória dos dados, identificando os fatores químicos que influenciam a qualidade dos produtos. Além disso, desenvolvi modelos de machine learning para prever a pontuação de qualidade dos vinhos, fornecendo insights estratégicos para apoiar o processo de seleção e importação.
 
 ### Objetivo
 
-Identificar relações entre os componentes químicos e a qualidade dos vinhos tintos portugueses, com foco específico na acidez volátil e teor alcoólico, a fim de determinar parâmetros ideais para novos produtos a serem importados.
+Identificar relações entre os componentes químicos e a qualidade dos vinhos portugueses, visando compreender os principais fatores que influenciam sua avaliação e utilizar esses insights para apoiar decisões estratégicas e o desenvolvimento de modelos preditivos com **machine learning**.
 
 ---
 
 ## 🔬 Metodologia
 
 ### 1. Aquisição e Preparação dos Dados
-- Dataset: "winequality-red.csv" (Fonte: UCI Machine Learning Repository)
-- Ferramenta: Python (Pandas, Matplotlib, Seaborn)
+- Dataset: winequality-red.csv (Fonte: UCI Machine Learning Repository)
+- Ferramentas: Python, Pandas, NumPy, Matplotlib, Seaborn
 - Procedimentos:
-  - Importação e inspeção inicial da estrutura do dataset
-  - Identificação e tratamento de valores duplicados
-  - Tratamento de valores ausentes
-  - Verificação de tipos de dados e conversões necessárias
+  - Importação e inspeção inicial do dataset
+  - Tratamento de valores duplicados e ausentes
+  - Ajuste de tipos de dados
+  - Criação de funções modulares para extração, transformação e armazenamento de dados no pacote ***etl/***
+  - Implementação de tratamento de outliers e balanceamento de classes no pacote ***features/***
 
 ### 2. Análise Exploratória de Dados (EDA)
-Foco nas seguintes variáveis e relacionamentos:
-- Distribuição da acidez volátil por níveis de qualidade
-- Distribuição do teor alcoólico por níveis de qualidade
-- Correlação entre acidez volátil e teor alcoólico
-- Correlação entre acidez volátil e qualidade do vinho
-- Correlação entre teor alcoólico e qualidade do vinho
+- Visualização e análise de distribuições de variáveis químicas
+- Identificação de correlações entre variáveis e qualidade do vinho
+- Uso de gráficos de dispersão, boxplots, histogramas e mapas de calor
+- Criação do módulo **visualization/** para centralizar funções gráficas reutilizáveis
+
+### 3. Desenvolvimento de Modelos de Machine Learning
+- Estrutura de código organizada em pacotes reutilizáveis (**models/**) para classificação, regressão e clustering
+- Implementação de pipelines (**pipeline_classification.py**, **pipeline_regression.py**, **pipeline_clustering.py**) para padronizar o fluxo de treino e avaliação
+- Utilização do **model_factory.py** com lazy loading, permitindo carregar modelos sob demanda e melhorar a escalabilidade do projeto
+- Aplicação de técnicas de otimização de hiperparâmetros com **RandomizedSearchCV**
+- Avaliação de modelos utilizando métricas como Acurácia, Precisão, Recall, F1-score e ROC AUC
+
+### 4. Modularização e Escalabilidade
+- Estrutura do projeto planejada para reuso e manutenção em diferentes datasets
+- Separação de responsabilidades por pacotes:
+  - **etl/** → Funções de extração, transformação e armazenamento
+  - features/ → Engenharia de variáveis e tratamento de dados
+  - models/ → Treinamento, avaliação e pipelines de ML
+  - visualization/ → Geração de gráficos e plots
+- Suporte para inclusão de novos modelos no **model_factory.py** sem alteração no restante do código
+
+### 5. Armazenamento e Versionamento de Modelos
+- Modelos treinados salvos em **models_storage/** para reutilização futura
+- Uso de joblib para serialização
+- Versionamento do código via GitHub
 
 ---
 
