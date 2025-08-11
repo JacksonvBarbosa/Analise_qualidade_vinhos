@@ -5,17 +5,11 @@ from sklearn.metrics import accuracy_score, classification_report, confusion_mat
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-def construir_pipeline(nome_modelo, modelo):
-    """Monta pipeline com scaler e modelo."""
-    return Pipeline([
-        ('scaler', StandardScaler()),
-        (nome_modelo, modelo)
-    ])
 
-def executar_random_search(pipeline, param_grid, X_train, y_train, cv, n_iter=10, scoring='f1_weighted'):
+def executar_random_search(modelo, param_grid, X_train, y_train, cv=10, n_iter=10, scoring='f1_weighted'):
     """Executa RandomizedSearchCV para otimização de hiperparâmetros."""
     busca = RandomizedSearchCV(
-        estimator=pipeline,
+        estimator=modelo,
         param_distributions=param_grid,
         n_iter=n_iter,
         scoring=scoring,
@@ -27,16 +21,44 @@ def executar_random_search(pipeline, param_grid, X_train, y_train, cv, n_iter=10
     busca.fit(X_train, y_train)
     return busca
 
-def avaliar_cross_validation(modelo, X_train, y_train, cv, scoring='f1_weighted'):
-    """Avalia modelo usando cross_val_score."""
-    scores = cross_val_score(modelo.best_estimator_, X_train, y_train, cv=cv, scoring=scoring, n_jobs=-1)
+import matplotlib.pyplot as plt
+
+def avaliar_cross_validation(modelo, X_train, y_train, cv=10, scoring='f1_weighted'):
+    """Avalia modelo usando cross_val_score com detalhes extras."""
+    if hasattr(modelo, 'best_estimator_'):
+        estimator = modelo.best_estimator_
+    else:
+        estimator = modelo
+
+    scores = cross_val_score(estimator, X_train, y_train, cv=cv, scoring=scoring, n_jobs=-1)
+
     print(f"\nValidação Cruzada ({scoring}):")
-    print(f"Média: {scores.mean():.4f} | Desvio Padrão: {scores.std():.4f}\n")
+    print(f"Scores por fold: {scores}")
+    print(f"Média: {scores.mean():.4f}")
+    print(f"Desvio Padrão: {scores.std():.4f}")
+    print(f"Melhor: {scores.max():.4f}")
+    print(f"Pior: {scores.min():.4f}")
+
+    # Visualização
+    plt.boxplot(scores, vert=False)
+    plt.title(f"Distribuição dos Scores ({scoring})")
+    plt.xlabel("Score")
+    plt.show()
+
 
 def avaliar_modelo(modelo_treinado, X_test, y_test):
     """Gera métricas e matriz de confusão para modelo treinado."""
-    y_pred = modelo_treinado.predict(X_test)
-    print("Melhores parâmetros:", modelo_treinado.best_params_)
+    if hasattr(modelo_treinado, 'predict'):
+        y_pred = modelo_treinado.predict(X_test)
+    else:
+        raise AttributeError("O modelo fornecido não possui método 'predict'.")
+
+    # Exibe melhores parâmetros se houver
+    if hasattr(modelo_treinado, 'best_params_'):
+        print("Melhores parâmetros:", modelo_treinado.best_params_)
+    else:
+        print("Melhores parâmetros: não aplicável (modelo não passou por busca de hiperparâmetros)")
+
     print("Acurácia:", accuracy_score(y_test, y_pred))
     print("Relatório de Classificação:\n", classification_report(y_test, y_pred))
 

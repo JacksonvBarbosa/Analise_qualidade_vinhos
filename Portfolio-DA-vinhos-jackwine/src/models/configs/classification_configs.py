@@ -2,6 +2,9 @@
 Configurações de hiperparâmetros para modelos de classificação.
 Modelos são importados apenas quando solicitados.
 """
+# Libs
+from scipy.stats import randint, uniform
+
 
 def get_classification_config(model_name):
     """
@@ -87,7 +90,6 @@ def get_classification_config(model_name):
             }
         },
         
-        # --- NOVO MODELO: Decision Tree Classifier ---
         'tree_classifier': {
             'import_path': 'sklearn.tree.DecisionTreeClassifier',
             'params': {
@@ -97,8 +99,30 @@ def get_classification_config(model_name):
                 'min_samples_leaf': 1,
                 'max_features': None
             }
+        },
+
+        'svm_classifier': {
+            'import_path': 'sklearn.svm.SVC',
+            'params': {
+                'C': 1.0,
+                'kernel': 'rbf',
+                'degree': 3,
+                'gamma': 'scale',
+                'coef0': 0.0,
+                'shrinking': True,
+                'probability': False,
+                'tol': 1e-3,
+                'cache_size': 200,
+                'class_weight': None,
+                'verbose': True,  # Mostra detalhes do treino
+                'max_iter': -1,
+                'decision_function_shape': 'ovr',
+                'break_ties': False,
+                'random_state': 42
+            }
         }
-    }
+
+}
     
     if model_name not in configs:
         available = list(configs.keys())
@@ -109,5 +133,4 @@ def get_classification_config(model_name):
 
 def get_available_classification_models():
     """Retorna lista de modelos de classificação disponíveis"""
-    # A lista foi atualizada para incluir o novo modelo
-    return ['logistic_regression', 'random_forest', 'xgboost', 'lightgbm', 'catboost', 'tree_classifier']
+    return list(get_classification_config.__defaults__[0].keys())

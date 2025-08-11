@@ -3,6 +3,8 @@ Factory para criar modelos com lazy loading.
 """
 
 import importlib
+from random import randint
+from random import uniform
 from src.models.configs.classification_configs import get_classification_config
 from src.models.configs.regression_configs import get_regression_config
 from src.models.configs.clustering_configs import get_clustering_config

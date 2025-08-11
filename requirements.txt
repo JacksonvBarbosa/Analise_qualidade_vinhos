@@ -10,7 +10,8 @@ beautifulsoup4 @ file:///home/conda/feedstock_root/build_artifacts/beautifulsoup
 bleach @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_bleach_1737382993/work
 Brotli @ file:///D:/bld/brotli-split_1749229870877/work
 cached-property @ file:///home/conda/feedstock_root/build_artifacts/cached_property_1615209429212/work
-certifi @ file:///home/conda/feedstock_root/build_artifacts/certifi_1752493286596/work/certifi
+catboost @ https://pypi.org/packages/cp311/c/catboost/catboost-1.2.8-cp311-cp311-win_amd64.whl#sha256=8985dd217fe79161b05ed251c5f8a18130e2330d5c77559ac91b99b0cf781e6b
+certifi @ file:///home/conda/feedstock_root/build_artifacts/certifi_1754231422783/work/certifi
 cffi @ file:///D:/bld/cffi_1725560706917/work
 charset-normalizer @ file:///home/conda/feedstock_root/build_artifacts/charset-normalizer_1746214863626/work
 colorama @ file:///home/conda/feedstock_root/build_artifacts/colorama_1733218098505/work
@@ -25,6 +26,7 @@ executing @ file:///home/conda/feedstock_root/build_artifacts/executing_17455020
 fastjsonschema @ file:///home/conda/feedstock_root/build_artifacts/python-fastjsonschema_1733235979760/work/dist
 fonttools @ file:///D:/bld/fonttools_1752722652722/work
 fqdn @ file:///home/conda/feedstock_root/build_artifacts/fqdn_1733327382592/work/dist
+graphviz @ file:///C:/b/abs_d0elvtecyp/croot/python-graphviz_1739534155086/work
 h11 @ file:///home/conda/feedstock_root/build_artifacts/h11_1745526374115/work
 h2 @ file:///home/conda/feedstock_root/build_artifacts/h2_1738578511449/work
 hpack @ file:///home/conda/feedstock_root/build_artifacts/hpack_1737618293087/work
@@ -32,6 +34,7 @@ httpcore @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_h
 httpx @ file:///home/conda/feedstock_root/build_artifacts/httpx_1733663348460/work
 hyperframe @ file:///home/conda/feedstock_root/build_artifacts/hyperframe_1737618333194/work
 idna @ file:///home/conda/feedstock_root/build_artifacts/idna_1733211830134/work
+imbalanced-learn @ file:///home/conda/feedstock_root/build_artifacts/imbalanced-learn_1734717084342/work
 importlib_metadata @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_importlib-metadata_1747934053/work
 ipykernel @ file:///D:/bld/ipykernel_1753749862891/work
 ipython @ file:///D:/bld/bld/rattler-build_ipython_1751470649/work
@@ -55,11 +58,14 @@ jupyterlab_pygments @ file:///home/conda/feedstock_root/build_artifacts/jupyterl
 jupyterlab_server @ file:///home/conda/feedstock_root/build_artifacts/jupyterlab_server_1733599573484/work
 kiwisolver @ file:///D:/bld/kiwisolver_1751493881237/work
 lark @ file:///home/conda/feedstock_root/build_artifacts/lark_1734709323538/work
+lightgbm @ file:///C:/b/abs_3epc06ws3_/croot/lightgbm_1741973076381/work
 MarkupSafe @ file:///D:/bld/markupsafe_1733219614059/work
 matplotlib==3.10.3
 matplotlib-inline @ file:///home/conda/feedstock_root/build_artifacts/matplotlib-inline_1733416936468/work
 mistune @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_mistune_1742402716/work
+mkl-service==2.4.0
 munkres==1.1.4
+narwhals @ file:///C:/b/abs_224ub5a528/croot/narwhals_1742845975749/work
 nbclient @ file:///home/conda/feedstock_root/build_artifacts/nbclient_1734628800805/work
 nbconvert @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_nbconvert-core_1738067871/work
 nbformat @ file:///home/conda/feedstock_root/build_artifacts/nbformat_1733402752141/work
@@ -75,6 +81,7 @@ patsy @ file:///home/conda/feedstock_root/build_artifacts/patsy_1733792384640/wo
 pickleshare @ file:///home/conda/feedstock_root/build_artifacts/pickleshare_1733327343728/work
 pillow @ file:///D:/bld/pillow_1751481992960/work
 platformdirs @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_platformdirs_1746710438/work
+plotly @ file:///C:/b/abs_13yyfuc6x9/croot/plotly_1744960898545/work
 prometheus_client @ file:///home/conda/feedstock_root/build_artifacts/prometheus_client_1748896729786/work
 prompt_toolkit @ file:///home/conda/feedstock_root/build_artifacts/prompt-toolkit_1744724089886/work
 psutil @ file:///D:/bld/psutil_1740663127374/work
@@ -97,12 +104,13 @@ rfc3339_validator @ file:///home/conda/feedstock_root/build_artifacts/rfc3339-va
 rfc3986-validator @ file:///home/conda/feedstock_root/build_artifacts/rfc3986-validator_1598024191506/work
 rfc3987-syntax @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_rfc3987-syntax_1752876729/work
 rpds-py @ file:///D:/bld/bld/rattler-build_rpds-py_1751467083/work
-scikit-learn @ file:///D:/bld/scikit-learn_1752825742314/work/dist/scikit_learn-1.7.1-cp311-cp311-win_amd64.whl#sha256=b17376defdd673e7f921f9f5431e2f412954d5a9296fe16a210a88d1841f6b53
-scipy @ file:///C:/bld/scipy-split_1751160069174/work/dist/scipy-1.16.0-cp311-cp311-win_amd64.whl#sha256=501ec7a40e8c93ed7a3b8aff6384c5eeb90071e24d500550ebdade18abebeeee
+scikit-learn @ file:///D:/bld/scikit-learn_1736496780928/work/dist/scikit_learn-1.6.1-cp311-cp311-win_amd64.whl#sha256=b8f37c282c66c737a09228918d0bfcadafb9f1d4bfb1dc6289040870d453703b
+scipy @ file:///C:/b/abs_b9r7ium9ba/croot/scipy_1753384423349/work/dist/scipy-1.16.0-cp311-cp311-win_amd64.whl#sha256=459247d92d6cb0e61ab6ebd1ea2942ae88fffb7d1c024f3b1e8fd9dd9e2ac191
 seaborn @ file:///home/conda/feedstock_root/build_artifacts/seaborn-split_1733730015268/work
 Send2Trash @ file:///D:/bld/send2trash_1733322089150/work
 shiboken6==6.9.1
 six @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_six_1753199211/work
+sklearn-compat @ file:///home/conda/feedstock_root/build_artifacts/sklearn-compat_1734794177910/work
 sniffio @ file:///home/conda/feedstock_root/build_artifacts/sniffio_1733244044561/work
 soupsieve @ file:///home/conda/feedstock_root/build_artifacts/soupsieve_1746563585861/work
 stack_data @ file:///home/conda/feedstock_root/build_artifacts/stack_data_1733569443808/work
@@ -125,5 +133,6 @@ webcolors @ file:///home/conda/feedstock_root/build_artifacts/webcolors_17333597
 webencodings @ file:///home/conda/feedstock_root/build_artifacts/webencodings_1733236011802/work
 websocket-client @ file:///home/conda/feedstock_root/build_artifacts/websocket-client_1733157342724/work
 win_inet_pton @ file:///D:/bld/win_inet_pton_1733130564612/work
+xgboost @ file:///C:/b/abs_d97hy_84m6/croot/xgboost-split_1749630932152/work/python-package
 zipp @ file:///home/conda/feedstock_root/build_artifacts/zipp_1749421620841/work
 zstandard==0.23.0

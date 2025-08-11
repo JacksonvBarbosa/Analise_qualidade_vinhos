@@ -8,8 +8,8 @@ from src.models.model_factory import ModelFactory
 from src.models.regression.train_regression_model import train_model
 from src.models.regression.predict_regression_model import predict
 from src.models.regression.evaluate_regression_model import evaluate_regression
-from src.etl.extract import extract_csv_processed
 from src.models.save_load_model import save_model
+from src.etl.extract import extract_csv_processed
 
 
 def pipeline_regression(
@@ -43,7 +43,7 @@ def pipeline_regression(
     
     # 1. Carregar dados
     if isinstance(data_path, str):
-        df = pd.read_csv(data_path)
+        df = extract_csv_processed(data_path)
     else:
         df = data_path
     X = df.drop(columns=[target_column])

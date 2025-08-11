@@ -3,13 +3,15 @@ Pipeline de classificação usando lazy loading.
 """
 
 import pandas as pd
+import os
+import sys
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from src.models.model_factory import ModelFactory
 from src.models.classification.train_classification_model import train_model
 from src.models.classification.predict_classification_model import predict
 from src.models.classification.evaluate_classification_model import evaluate_classification
-from src.etl.extract import extract_csv_processed
 from src.models.save_load_model import save_model
+from src.etl.extract import extract_csv_processed
 
 
 def pipeline_classification(
@@ -26,7 +28,7 @@ def pipeline_classification(
     Pipeline de classificação com lazy loading.
     
     Args:
-        data_path (str): Caminho dos dados
+        data_path (str): Caminho dos dados, poder ser caminho do arquivo ou dataframe
         target_column (str): Nome da coluna target
         model_name (str): Nome do modelo ('random_forest', 'xgboost', etc.)
         custom_params (dict): Parâmetros customizados do modelo
@@ -44,7 +46,7 @@ def pipeline_classification(
     
     # 1. Carregar dados
     if isinstance(data_path, str):
-        df = pd.read_csv(data_path)
+        df = extract_csv_processed(data_path)
     else:
         df = data_path
     X = df.drop(columns=[target_column])
