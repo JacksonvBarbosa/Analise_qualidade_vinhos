@@ -1,10 +1,7 @@
 """
 Pipeline de classificação usando lazy loading.
 """
-
-import pandas as pd
-import os
-import sys
+# Libs
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from src.models.model_factory import ModelFactory
 from src.models.classification.train_classification_model import train_model

@@ -120,17 +120,17 @@ def rename_columns(df, column_mapping, verbose=True):
     df_renamed = df.copy()
     
     # Verificar se colunas existem
-    colunas = {col: column_mapping[i] for i, col in enumerate(df.columns)}
-    missing_cols = [col for col in colunas.keys() if col not in df_renamed.columns]
+    #colunas = {col: column_mapping[i] for i, col in enumerate(df.columns)}
+    missing_cols = [col for col in column_mapping.keys() if col not in df_renamed.columns]
     if missing_cols:
         print(f"⚠️  Colunas não encontradas: {missing_cols}")
         column_mapping = {k: v for k, v in column_mapping.items() if k not in missing_cols}
     
-    df_renamed = df_renamed.rename(columns=colunas)
+    df_renamed = df_renamed.rename(columns=column_mapping)
     
-    if verbose and colunas:
+    if verbose and column_mapping:
         print("🏷️  COLUNAS RENOMEADAS:")
-        for old, new in colunas.items():
+        for old, new in column_mapping.items():
             print(f"   '{old}' → '{new}'")
     
     return df_renamed
