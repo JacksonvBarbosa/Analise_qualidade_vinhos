@@ -169,18 +169,31 @@ Para replicar o ambiente de desenvolvimento, siga estes passos:
 **Crie e ative o ambiente virtual:**
 ```bash
 # Criar um novo ambiente
+# Conda
 conda create --name <nome_do_seu_projeto> python=3.10
 
 # Ativar o ambiente
+# Conda
 conda activate <nome_do_seu_projeto>
+# Git Bash (ou WSL/Linux)
+source .venv/Scripts/activate
+# PowerShell 
+.venv\Scripts\Activate.ps1
+# Prompt de Comando (cmd) 
+.venv\Scripts\activate.bat
 ```
 
-**Instale as dependências:**
+**Instale as dependências caso não esteja utilizando o poetry:**
 ```bash
 pip install -r requirements.txt
 ```
 ```bash
 conda env create -f environment.yml
+```
+
+**Com o poetry**
+```bash
+poetry install
 ```
 
 **Configure no VS Code:**
