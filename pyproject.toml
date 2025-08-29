@@ -1,0 +1,29 @@
+[project]
+name = "analise-qualidade-vinhos"
+version = "0.1.0"
+description = "Projeto de análise de qualidade de vinhos com base nos materiais utilizados"
+authors = [
+    {name = "JacksonvBarbosa",email = "jacksonsventura@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pandas (>=2.3.2,<3.0.0)",
+    "matplotlib (>=3.10.5,<4.0.0)",
+    "scipy (>=1.16.1,<2.0.0)",
+    "seaborn (>=0.13.2,<0.14.0)",
+    "imblearn (>=0.0,<0.1)",
+    "catboost (>=1.2.8,<2.0.0)",
+    "lightgbm (>=4.6.0,<5.0.0)",
+    "xgboost (>=3.0.4,<4.0.0)"
+]
+
+[tool.poetry]
+packages = [
+    { include = "analise_qualidade_vinhos", from = "src" }
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
