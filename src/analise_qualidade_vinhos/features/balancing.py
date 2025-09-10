@@ -4,48 +4,39 @@ Módulo para balanceamento de dados usando diferentes técnicas
 from collections import Counter
 from imblearn.over_sampling import SMOTE
 from imblearn.under_sampling import RandomUnderSampler
-from imblearn.combine import SMOTEENN
+from imblearn.combine import SMOTEENN, SMOTETomek
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
 # Funções Puros Facíl usabilidade
 
 # Função que retorna co-variável e a variável resposta
+
+
 def balance_data(X, y, method='smote', random_state=42, verbose=True):
-    """
-        Balancea co-variável e variável resposta
-
-        Parametros:
-        X - Co-Variável
-        y - Variável Resposta
-        method - método de uso (
-        smote - Oversampling sintético - cria novos exemplos.
-        under - Undersampling - remove exemplos da classe majoritária.
-        smoteenn - Combinação de SMOTE + Edited Nearest Neighbours.)
-        random_state=42 - Gera os mesmo estado para quem for utilizar  a função.
-        verbose=True - mostra infomações
-
-        Return:
-        Retorna X e y para uso especifico
-    """
-    if verbose:
-        print(f"Distribuição original: {Counter(y)}")
-
     if method == 'smote':
+        from imblearn.over_sampling import SMOTE
         sampler = SMOTE(random_state=random_state)
     elif method == 'under':
+        from imblearn.under_sampling import RandomUnderSampler
         sampler = RandomUnderSampler(random_state=random_state)
     elif method == 'smoteenn':
+        from imblearn.combine import SMOTEENN
         sampler = SMOTEENN(random_state=random_state)
+    elif method == 'smotetomek':
+        sampler = SMOTETomek(random_state=random_state)
     else:
-        raise ValueError("Método inválido: use 'smote', 'under' ou 'smoteenn'")
+        raise ValueError(f"Método {method} não suportado.")
 
     X_res, y_res = sampler.fit_resample(X, y)
     
     if verbose:
-        print(f"Distribuição após balanceamento: {Counter(y_res)}")
-
+        from collections import Counter
+        print("Distribuição original:", Counter(y))
+        print("Distribuição após balanceamento:", Counter(y_res))
+        
     return X_res, y_res
+
 
 # Função DataFrame balanceado
 def balance_dataframe(df, target_column, method='smote', random_state=42, verbose=True):

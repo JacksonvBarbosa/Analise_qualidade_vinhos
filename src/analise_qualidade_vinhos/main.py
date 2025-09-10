@@ -1,6 +1,4 @@
-from src.etl.extract import load_csv
-from src.features.engineering import create_features
-from src.models.train_model import train_model
+
 
 # Insira as funções do seu projeto para que o Pipeline possa agira corretamente
 def main():

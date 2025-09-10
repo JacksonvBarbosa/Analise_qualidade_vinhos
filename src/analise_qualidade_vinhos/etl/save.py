@@ -1,6 +1,10 @@
 import os
-from analise_qualidade_vinhos.config import DATA_PROCESSED
+from analise_qualidade_vinhos.config import DATA_PROCESSED, DATA_PRODUCTION
 
 def save_to_csv(df, filename: str):
     filepath = os.path.join(DATA_PROCESSED, filename)
     df.to_csv(filename, index=False)
+
+def save_to_excel(df, filename: str):
+    filepath = os.path.join(DATA_PRODUCTION, filename)
+    df.to_excel(filename)
