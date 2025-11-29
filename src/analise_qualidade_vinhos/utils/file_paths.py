@@ -1,5 +1,5 @@
 import os
-from analise_qualidade_vinhos.config import DATA_RAW, DATA_PROCESSED, DATA_INTERIM
+from analise_qualidade_vinhos.config.settings import DATA_RAW, DATA_PROCESSED, DATA_INTERIM
 
 def get_file_path(filename_or_path: str, folder: str = "raw") -> str:
     """

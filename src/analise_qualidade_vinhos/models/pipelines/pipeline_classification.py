@@ -20,8 +20,7 @@ def pipeline_classification(
     test_size=0.2,
     return_data=False,
     avarage='binary',
-    save=None,
-    production=False
+    save=None
 ):
     """
     Pipeline de classificação com lazy loading.

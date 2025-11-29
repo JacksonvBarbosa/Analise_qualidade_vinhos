@@ -6,7 +6,7 @@ authors = [
     {name = "JacksonvBarbosa",email = "jacksonsventura@gmail.com"}
 ]
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.11,<=3.13"
 dependencies = [
     "pandas (>=2.3.2,<3.0.0)",
     "matplotlib (>=3.10.5,<4.0.0)",
@@ -16,7 +16,10 @@ dependencies = [
     "catboost (>=1.2.8,<2.0.0)",
     "lightgbm (>=4.6.0,<5.0.0)",
     "xgboost (>=3.0.4,<4.0.0)",
-    "openpyxl (>=3.1.5,<4.0.0)"
+    "openpyxl (>=3.1.5,<4.0.0)",
+    "requests (>=2.32.5,<3.0.0)",
+    "sqlalchemy (>=2.0.44,<3.0.0)",
+    "bs4 (>=0.0.2,<0.0.3)"
 ]
 
 [tool.poetry]

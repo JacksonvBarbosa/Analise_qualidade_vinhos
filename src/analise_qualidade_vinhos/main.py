@@ -2,15 +2,7 @@
 
 # Insira as funções do seu projeto para que o Pipeline possa agira corretamente
 def main():
-    df = load_csv("insira o arquivo")
-    df = create_features(df)
-
-    X = df[["o que for treinar"]]
-    y = df['target']
-
-    model = train_model(X, y)
-    print('Modelo treinado com sucesso!')
-
+    print("OK")
 
 if __name__ == "__main__":
     main()
