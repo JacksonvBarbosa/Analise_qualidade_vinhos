@@ -74,13 +74,24 @@ jobs:
             ${{ runner.os }}-pip-
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          pip install -r requirements.txt
 
-      - name: Install package
-        run: pip install -e .
+      - name: Install package (editable)
+        run: |
+          # Ensure build tools available and install package in editable mode
+          python -m pip install --upgrade pip setuptools wheel
+          pip install poetry-core || true
+          pip install -e .
 
       - name: Run tests
-        run: pytest -q
+        env:
+          PYTHONPATH: ./src
+        run: |
+          echo "PYTHONPATH=$PYTHONPATH"
+          python -c "import sys; print('sys.path sample ->', sys.path[:3])"
+          pytest -q
 
       - name: Lint (opcional)
         run: |
