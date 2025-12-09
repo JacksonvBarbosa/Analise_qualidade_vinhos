@@ -58,3 +58,4 @@ def predict(samples: List[WineSample]) -> dict:
     return {"predictions": preds}
 
 
+

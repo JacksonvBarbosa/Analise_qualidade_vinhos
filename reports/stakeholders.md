@@ -30,3 +30,4 @@
 - Diferencial técnico: pipeline completo com engenharia de features, balanceamento e comparação automatizada de modelos; deploy via API e app interativo.
 
 
+
