@@ -1,251 +1,121 @@
-# Análise da Qualidade de Vinhos
-**Portfólio de Data Analytics | Jackson dos Santos Ventura**
+# Análise da Qualidade de Vinhos (MLOps)
+Portfólio focado em boas práticas básicas de MLOps, com **classificação binária**: **Alta qualidade** (≥6) e **Baixa qualidade** (<6).
 
-## 📊 Projeto: Análise Exploratória de Vinhos Importados para JACKWine
+## Propósito do Projeto
 
-### Contexto do Projeto
-A distribuidora JACKWine está expandindo seu catálogo através da importação de vinhos portugueses. Como analista de dados da empresa, realizei uma análise exploratória dos dados, identificando os fatores químicos que influenciam a qualidade dos produtos. Além disso, desenvolvi modelos de machine learning para prever a pontuação de qualidade dos vinhos, fornecendo insights estratégicos para apoiar o processo de seleção e importação.
+Este repositório tem o objetivo de demonstrar um fluxo completo de MLOps aplicado à predição da qualidade de vinhos a partir de medidas físico-químicas. O foco é entregar um processo reprodutível que inclui:
 
-### Objetivo
-Identificar relações entre os componentes químicos e a qualidade dos vinhos portugueses, visando compreender os principais fatores que influenciam sua avaliação e utilizar esses insights para apoiar decisões estratégicas e o desenvolvimento de modelos preditivos com machine learning.
+- Ingestão e tratamento dos dados brutos;
+- Engenharia de atributos e seleção de features;
+- Balanceamento de classes e comparação de modelos;
+- Automação de treino, teste e empacotamento (API + app Streamlit);
+- Boas práticas de reprodutibilidade (Docker, testes, CI).
 
-## 🔬 Metodologia
+O artefato principal é um pipeline treinado que pode ser servido via API (`/predict`) ou usado no app Streamlit para auxiliar decisões operacionais.
 
-### 1. Aquisição e Preparação dos Dados
-**Dataset:** winequality-red.csv (Fonte: UCI Machine Learning Repository)
+## Insights principais (para apresentação)
 
-**Ferramentas:** Python, Pandas, NumPy, Matplotlib, Seaborn
+- **Importância de features**: Em análises comuns do dataset de vinho tinto, atributos como `alcohol`, `volatile_acidity`, `sulphates` e interações envolvendo `density` frequentemente aparecem como fortes preditores de qualidade. Nosso pipeline inclui seleção automática (Top 20) para concentrar sinal.
+- **Balanceamento é crucial**: O conjunto original tende a ter distribuição desigual entre classes; técnicas como SMOTEENN/ADASYN melhoram desempenho em métricas ponderadas (F1 weighted) comparado a treinar sem balanceamento.
+- **Comparação de algoritmos**: Testamos RandomForest, GradientBoosting e, quando disponíveis, XGBoost/LightGBM. Escolhemos o melhor pipeline por F1-weighted e retreinamos para produção.
+- **Trade-offs operacionais**: Modelos com maior F1 tendem a ser mais complexos; para deploy em ambientes com restrição de recursos, RandomForest com menos estimators pode ser um bom compromisso.
+- **Recomendações rápidas**: monitorar distribuição das features críticas (`alcohol`, `pH`, `volatile_acidity`), validar contagens por rótulo e automatizar alertas de drift.
 
-**Procedimentos:**
-- Importação e inspeção inicial do dataset
-- Tratamento de valores duplicados e ausentes
-- Ajuste de tipos de dados
-- Criação de funções modulares para extração, transformação e armazenamento de dados no pacote `etl/`
-- Implementação de tratamento de outliers e balanceamento de classes no pacote `features/`
 
-### 2. Análise Exploratória de Dados (EDA)
-- Visualização e análise de distribuições de variáveis químicas
-- Identificação de correlações entre variáveis e qualidade do vinho
-- Uso de gráficos de dispersão, boxplots, histogramas e mapas de calor
-- Criação do módulo `visualization/` para centralizar funções gráficas reutilizáveis
+## Visão Geral
+- **Stacks:** pandas, scikit-learn, FastAPI e testes com pytest.
+- **Pipeline reproduzível:** leitura do dado bruto, engenharia de atributos, balanceamento com SMOTE e modelo RandomForest.
+- **Entrega pronta:** Dockerfile, API `/predict`, CI/CD via GitHub Actions e relatórios claros para stakeholders.
 
-### 3. Desenvolvimento de Modelos de Machine Learning
-- Estrutura de código organizada em pacotes reutilizáveis (`models/`) para classificação, regressão e clustering
-- Implementação de pipelines (`pipeline_classification.py`, `pipeline_regression.py`, `pipeline_clustering.py`) para padronizar o fluxo de treino e avaliação
-- Utilização do `model_factory.py` com lazy loading, permitindo carregar modelos sob demanda e melhorar a escalabilidade do projeto
-- Aplicação de técnicas de otimização de hiperparâmetros com RandomizedSearchCV
-- Avaliação de modelos utilizando métricas como Acurácia, Precisão, Recall, F1-score e ROC AUC
+## Arquitetura
+- `src/analise_qualidade_vinhos/config/settings.py` – caminhos, seeds e colunas alvo.
+- `src/analise_qualidade_vinhos/features/engineering.py` – renomeia colunas, cria atributos e o alvo binário (2 classes).
+- `src/analise_qualidade_vinhos/pipeline/model_builder.py` – pré-processador, balanceamento e modelo.
+- `src/analise_qualidade_vinhos/pipeline/train.py` – treino + salvamento de métricas e artefatos.
+- `src/analise_qualidade_vinhos/pipeline/predict.py` – preparação e inferência.
+- `src/analise_qualidade_vinhos/api.py` – API FastAPI (health e predict).
+- `tests/` – unidade e integração do pipeline.
 
-### 4. Modularização e Escalabilidade
-- Estrutura do projeto planejada para reuso e manutenção em diferentes datasets
-- Separação de responsabilidades por pacotes:
-  - `etl/` → Funções de extração, transformação e armazenamento
-  - `features/` → Engenharia de variáveis e tratamento de dados
-  - `models/` → Treinamento, avaliação e pipelines de ML
-  - `visualization/` → Geração de gráficos e plots
-- Suporte para inclusão de novos modelos no `model_factory.py` sem alteração no restante do código
-
-### 5. Armazenamento e Versionamento de Modelos
-- Modelos treinados salvos em `models_storage/` para reutilização futura
-- Uso de joblib para serialização
-- Versionamento do código via GitHub
-
-## 📊 Análise Exploratória e Pré-Processamento — Qualidade de Vinhos
-
-Este estudo tem como objetivo analisar o Wine Quality Dataset, obtido através do Kaggle, e aplicar técnicas de pré-processamento para preparar os dados para modelos de machine learning voltados à previsão da qualidade de vinhos.
-
-### 1. Entendimento Inicial dos Dados
-O dataset foi analisado em sua forma bruta (raw data), contendo atributos físico-químicos e a nota de qualidade do vinho.
-
-A partir das estatísticas descritivas, identificamos:
-- Baixa dispersão na maioria das variáveis, devido ao baixo desvio padrão
-- Maior variabilidade no dióxido de enxofre (livre e total), com desvio padrão elevado — podendo apresentar valores muito acima ou abaixo da média
-
-Esse comportamento pode comprometer a capacidade de generalização dos modelos, tornando necessária a padronização dos dados para equilibrar as escalas durante o treinamento e teste.
-
-### 2. Dados Duplicados
-Registros duplicados são comuns neste tipo de análise, pois amostras com propriedades físico-químicas semelhantes tendem a gerar notas de qualidade próximas ou iguais. Por isso, neste caso, a duplicidade não foi tratada como erro.
-
-### 3. Distribuição e Outliers
-Os gráficos de distribuição e boxplots mostraram:
-- Ausência de distribuição normal em várias variáveis
-- Presença de outliers detectados pelo IQR e z-score
-
-Optou-se por manter os outliers detectados pelo IQR, aplicando capping para limitar valores extremos. Essa decisão reduz a dispersão e melhora o desempenho de algoritmos sensíveis à escala, como Logistic Regression e SVM.
-
-### 4. Relações Entre Variáveis
-
-#### 4.1 Acidez Volátil × Qualidade
-Vinhos de alta qualidade tendem a ter menor acidez volátil, idealmente abaixo de 1,0 g/L. No entanto, a acidez não atua isoladamente e deve ser analisada junto a outros fatores.
-
-#### 4.2 Teor Alcoólico × Qualidade
-Os dados indicam relação diretamente proporcional (r ≈ 0,48). Apesar disso:
-- Maior teor alcoólico não garante melhor qualidade
-- Para equilíbrio no paladar, recomenda-se manter abaixo de 13%
-- Pela legislação brasileira, o mínimo para ser considerado vinho é 7%
-
-#### 4.3 Sulfitos e Ácido Cítrico × Qualidade
-- **Sulfito:** manter abaixo de 1,0 g/L para priorizar processos mais naturais
-- **Ácido cítrico:** manter abaixo de 0,5 g/L
-- pH baixo contribui para maior longevidade do vinho
-
-#### 4.4 Acidez Volátil × Teor Alcoólico
-Não há padrão claro que permita prever o teor alcoólico a partir da acidez volátil.
-
-### 5. Balanceamento de Classes
-O dataset apresenta alto desbalanceamento nas classes de qualidade, o que poderia enviesar os modelos.
-
-Foi aplicada a técnica **SMOTEENN**, que combina:
-- **SMOTE:** gera amostras sintéticas para a classe minoritária
-- **Undersampling inteligente:** remove ruídos e pontos conflitantes entre classes
-
-Com isso, as fronteiras entre as classes ficaram mais limpas, aumentando a robustez do treinamento.
-
-### 6. Conclusões e Próximos Passos
-- A correlação entre teor alcoólico e qualidade é moderada, mas não implica causalidade
-- O pré-processamento incluiu capping para outliers e padronização para variáveis de alta variabilidade
-- O desbalanceamento foi corrigido com SMOTEENN, reduzindo viés nos modelos
-- A próxima etapa será o treinamento de algoritmos de classificação usando as variáveis originais
-- Caso o desempenho não atinja o esperado, serão incorporadas variáveis externas (tipo de uva, região climática, técnicas de vinificação) para aprimorar a previsão da qualidade
-
-## 🤖 Machine Learning
-
-Nesta etapa, aplicamos diferentes algoritmos de machine learning para prever a qualidade do vinho com base nas variáveis do nosso dataset.
-
-O objetivo foi comparar modelos, avaliar métricas de desempenho e realizar validações para garantir que as previsões sejam consistentes e livres de overfitting, assegurando a melhor escolha para uso em produção.
-
-### 🔹 Modelos utilizados
-
-#### Classificação
-- `logistic_regression` → log_reg
-- `random_forest` → rf_clf
-- `xgboost` → xgb_clf
-- `lightgbm` → lgbm_clf
-- `catboost` → catb_clf
-- `tree_classifier` → treec_clf
-- `svm_classifier` → svm_clf
-
-#### Regressão
-- `linear_regression` → lin_reg
-- `random_forest` → rf_reg
-- `xgboost` → xgb_reg
-- `lightgbm` → lgbm_reg
-
-#### Clustering
-- `kmeans` → kmeans_cluster
-- `dbscan` → dbscan_cluster
-
-Nosso modelo base, a **Árvore de Classificação**, já apresentou um resultado muito satisfatório, como mostrado anteriormente. A partir dele, rodamos outros modelos para comparação e aplicamos validações para garantir que nossos dados não estivessem sofrendo de overfitting, o que poderia prejudicar as previsões.
-
-### 📊 Comparação de Modelos
-- **Regressão Logística** → Teve desempenho inferior ao modelo base
-- **Todos os modelos** → Obtiveram F1-score acima de 80%, um ótimo resultado para nossas predições
-- **Melhor desempenho** → Random Forest, com 97% de F1-score — modelo escolhido para as validações finais
-
-### 🔍 Validações Realizadas
-
-#### 1. Validação Cruzada + Random Search
-Foi aplicada validação cruzada combinada com Random Search, que testa diferentes blocos de dados separadamente, preservando a generalização.
-
-**Resultados:**
-- Média dos scores por fold: 0.96
-- Desvio padrão: 0.0053 (baixo, indicando consistência)
-- Resultado idêntico de acurácia (0.955) foi obtido mesmo sem cruzar os dados, reforçando a estabilidade do modelo
-
-#### 2. Análise de Overfitting
-- Apesar de o treino apresentar score 1.0, o teste manteve 0.955, mostrando que o modelo está generalizando bem para dados novos
-- A curva de aprendizado confirmou que a validação está próxima ao treino, sem evidências de overfitting
-
-### ✅ Conclusão
-Os testes e validações confirmaram que o **Random Forest** é o modelo mais adequado para este problema, entregando alta performance e mantendo a capacidade de generalização. O próximo passo será aplicar este modelo em dados novos para validar seu comportamento em produção.
-
-## 🚀 Como utilizar no projeto
-
-A arquitetura do projeto foi pensada para ser prática. Para treinar, avaliar e fazer previsões com qualquer modelo disponível, siga o guia abaixo.
-
-### 1. Instalação e Configuração
-Para replicar o ambiente de desenvolvimento, siga estes passos:
-
-**Crie e ative o ambiente virtual:**
+## Como rodar localmente
 ```bash
-# Criar um novo ambiente
-# Conda
-conda create --name <nome_do_seu_projeto> python=3.10
-
-# Ativar o ambiente
-# Conda
-conda activate <nome_do_seu_projeto>
-# Git Bash (ou WSL/Linux)
-source .venv/Scripts/activate
-# PowerShell 
-.venv\Scripts\Activate.ps1
-# Prompt de Comando (cmd) 
-.venv\Scripts\activate.bat
-```
-
-**Instale as dependências caso não esteja utilizando o poetry:**
-```bash
+python -m venv .venv
+.venv\Scripts\activate        # Windows
 pip install -r requirements.txt
+
+# Treino
+python -m analise_qualidade_vinhos.pipeline.train
+
+# Testes
+pytest
 ```
+
+### Subir com Docker Compose
 ```bash
-conda env create -f environment.yml
+# Subir API (web) e Streamlit juntos (builda as imagens se necessário)
+docker compose up --build
+
+# Ou subir em background (detached)
+docker compose up --build -d
 ```
 
-**Com o poetry**
+Observação: o arquivo `docker-compose.yml` deve estar na raiz do projeto. Os serviços padrão iniciam a API (`web`) em `:8000` e o app Streamlit em `:8501`.
+
+Endpoints:
+- `GET /health` → status
+- `POST /predict` → envia lista de amostras com as 11 features originais (snake_case).
+
+## Dados e Engenharia de Atributos
+Fonte: `data/raw/winequality-red.csv` (UCI).
+- Normalização de nomes para snake_case.
+- Criação de interações simples (ex.: `density_alcohol_ratio`, `total_free_sulfur_ratio`, `acidity_index`).
+- **Classificação binária**: ≥6 = Alta qualidade, <6 = Baixa qualidade (`quality_label`).
+- Balanceamento com SMOTEENN/ADASYN/SMOTE antes do treino.
+- Seleção de features (Top 20) para melhor performance.
+
+## Parâmetros de produção — Limites e recomendações
+
+Para auxiliar na interpretação dos atributos químicos do vinho e orientar controles de qualidade, abaixo estão os limites de segurança, faixas recomendadas para melhor qualidade e riscos quando fora dos limites:
+
+| Parâmetro                 | Intervalo Aceitável (Segurança) | Faixa Recomendada (Qualidade) | Riscos se fora do limite                                        |
+| ------------------------- | ------------------------------- | ----------------------------- | --------------------------------------------------------------- |
+| **Acidez fixa (g/L)**     | 3.5 – 14.0                      | 4.0 – 10.0                    | Acidez baixa = vinho “mole”; acidez alta = agressivo ao paladar |
+| **Acidez volátil (g/L)**  | **≤ 1.20 g/L** (legal)          | 0.30 – 0.90                   | Acima disso → cheiro de vinagre (ácido acético)                 |
+| **Ácido cítrico (g/L)**   | 0.0 – 1.0                       | 0.2 – 0.5                     | Muito alto causa sabor artificial, muito baixo reduz frescor    |
+| **Açúcar residual (g/L)** | 0.2 – 20.0                      | Secos: < 4.0                  | Açúcar excessivo favorece contaminações microbianas             |
+| **Cloretos (g/L)**        | 0.01 – 0.60                     | 0.05 – 0.15                   | Acima gera gosto salgado e instabilidade microbiológica         |
+| **SO₂ Livre (mg/L)**      | **0 – 50 mg/L**                 | 10 – 30                       | Baixo → oxidação; alto → alergias, irritações                   |
+| **SO₂ Total (mg/L)**      | **0 – 150 mg/L** (legal)        | 30 – 100                      | Acima → risco toxicológico e sabor picante                      |
+| **Densidade (g/cm³)**     | 0.990 – 1.010                   | 0.992 – 0.998                 | Fora → erros de fermentação ou adulteração                      |
+| **pH**                    | **2.8 – 4.2**                   | 3.0 – 3.5                     | pH alto = risco microbiológico; pH baixo = acidez agressiva     |
+| **Sulfatos (g/L)**        | 0.3 – 1.5                       | 0.5 – 1.0                     | Excesso → sensação metálica; pouco → baixa estabilidade         |
+| **Álcool (%)**            | **8% – 16%** (mercado)          | 10% – 13%                     | Baixo → instável microbiologicamente; alto → caráter quente     |
+
+
+## Métricas
+- O sistema testa automaticamente múltiplos algoritmos (RandomForest, GradientBoosting, XGBoost, LightGBM).
+- Seleciona o melhor modelo baseado em F1-score.
+- Métricas salvas em `reports/metrics.json`.
+
+## App Streamlit para Produção
+Execute o app interativo para uso pelos funcionários:
 ```bash
-poetry install
+streamlit run app.py
 ```
+Interface completa com formulário, predições em tempo real e recomendações.
+- Classes previstas: `Baixa qualidade` (<6) e `Alta qualidade` (≥6).
 
-**Configure no VS Code:**
-1. Pressione `Ctrl + Shift + P`
-2. Digite "Python: Select Interpreter"
-3. Escolha o ambiente que você criou
+## CI/CD (GitHub Actions)
+- Workflow em `.github/workflows/ci.yml`:
+  - Instala dependências
+  - Roda `pytest`
+  - (opcional) build do Docker
 
-### 2. Exemplo de uso com o pipeline_classification
-A forma mais prática de testar um modelo é utilizando a função de pipeline. Basta fornecer o caminho do seu arquivo de dados e o nome do modelo desejado.
+## Entregáveis para stakeholders
+- Relatório executivo: `reports/stakeholders.md`
+- Métricas do modelo: `reports/metrics.json` (gerado no treino)
+- API pronta para consumo ou uso via CLI.
 
-```python
-from src.models.pipeline_classification import pipeline_classification
-
-# Exemplo de uso para o modelo RandomForest
-results = pipeline_classification(
-    data_path=DATA_PROCESSED / 'seu_dataset_processado.csv',
-    target_column='qualidade',
-    model_name='random_forest',
-    scale_type='standard',
-    test_size=0.2
-)
-
-# Para inspecionar os resultados
-print("Métricas de Avaliação:", results['metrics'])
-print("Modelo Treinado:", results['model'])
-```
-
-### 3. Testes individuais
-Para testar um modelo específico sem usar o pipeline completo, você pode criar e treinar diretamente:
-
-```python
-from src.models.model_factory import ModelFactory
-
-# Carregar o modelo desejado
-modelo = ModelFactory.create_classification_model("random_forest")
-
-# Treinar e usar o modelo
-modelo.fit(X_train, y_train)
-predicoes = modelo.predict(X_test)
-```
-
-## 📚 Referências
-
-- **UCI Machine Learning Repository** - Wine Quality Dataset
-
-- **Winefun** - "Acidez volátil: conheça um dos defeitos mais controvertidos do mundo dos vinhos"  
-  Fonte: Winefun  
-  https://winefun.com.br/acidez-volatil-conheca-um-dos-defeitos-mais-controvertidos-do-mundo-dos-vinhos/
-
-- **Wine.com.br** - Winepedia: "Álcool pra quê?"  
-  https://www.wine.com.br/winepedia/alcool-pra-que/
-
----
-
-*Este projeto faz parte do meu portfólio em desenvolvimento durante a pós-graduação em Data Analytics. À medida que avanço no curso, novas técnicas e análises serão incorporadas para enriquecer este e outros estudos.*
+## Próximos passos ao adquirir mais experiência.
+- Adicionar monitoramento de drift e logging estruturado.
+- Comparar modelos adicionais (XGBoost/LightGBM) se houver necessidade.
+- Publicar imagem no GHCR e ativar CD para ambiente cloud.

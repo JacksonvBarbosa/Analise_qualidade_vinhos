@@ -1,38 +1,26 @@
-import os
+from pathlib import Path
 
-# Caminho da pasta onde este arquivo está
-PACKAGE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = Path(__file__).resolve().parents[3]
 
-# Caminho raiz do projeto (sobe 3 níveis)
-BASE_DIR = os.path.abspath(os.path.join(PACKAGE_DIR, "..", "..", ".."))
+# data
+DATA_DIR = BASE_DIR / "data"
+RAW_DATA_PATH = DATA_DIR / "raw" / "winequality-red.csv"
+INTERIM_DATA_DIR = DATA_DIR / "interim"
+PROCESSED_DATA_DIR = DATA_DIR / "processed"
 
-# Estrutura de pastas para dados
-DATA_DIR = os.path.join(BASE_DIR, "data")
-DATA_RAW = os.path.join(DATA_DIR, "raw")
-DATA_PROCESSED = os.path.join(DATA_DIR, "processed")
-DATA_INTERIM = os.path.join(DATA_DIR, "interim")
+# artifacts
+LOG_DIR = BASE_DIR / "logs"
+MODEL_DIR = BASE_DIR / "models"
+REPORTS_DIR = BASE_DIR / "reports"
 
-# Pasta de notebooks
-NOTEBOOK_DIR = os.path.join(BASE_DIR, "notebooks")
-
-# Configurações padrão
-SEED = 42
+# ml
+RANDOM_STATE = 42
 TEST_SIZE = 0.2
-TARGET_COLUMN = "target"
+TARGET_COLUMN = "quality_label"
+QUALITY_LABELS = [
+    "Baixa qualidade",
+    "Alta qualidade",
+]
 
-# Pastas de logs e modelos (dentro do projeto)
-LOG_DIR = os.path.join(BASE_DIR, "logs")
-MODEL_DIR = os.path.join(BASE_DIR, "models")
-
-# Garante que existem
-os.makedirs(LOG_DIR, exist_ok=True)
-os.makedirs(MODEL_DIR, exist_ok=True)
-
-
-'''
-🛠️ Modifique quando iniciar um projeto:
-
-Mude TARGET_COLUMN para a variável dependente do seu dataset.
-
-Adapte TEST_SIZE e SEED conforme necessidade.
-'''
+for path in [DATA_DIR, INTERIM_DATA_DIR, PROCESSED_DATA_DIR, LOG_DIR, MODEL_DIR, REPORTS_DIR]:
+    path.mkdir(parents=True, exist_ok=True)

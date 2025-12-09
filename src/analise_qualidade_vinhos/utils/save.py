@@ -1,6 +1,6 @@
 import os
 import pandas as pd
-from analise_qualidade_vinhos.config.settings import DATA_PROCESSED, DATA_INTERIM, DATA_RAW 
+from analise_qualidade_vinhos.config.settings import PROCESSED_DATA_DIR, INTERIM_DATA_DIR, RAW_DATA_PATH 
 
 # Salva em Processed
 def save_to_csv_processed(df, filename: str, index=None):
@@ -15,10 +15,10 @@ def save_to_csv_processed(df, filename: str, index=None):
         str: Caminho completo do arquivo salvo
     """
     # Garante que a pasta existe
-    os.makedirs(DATA_PROCESSED, exist_ok=True)
+    os.makedirs(PROCESSED_DATA_DIR, exist_ok=True)
     
     # Monta o caminho completo
-    filepath = os.path.join(DATA_PROCESSED, filename)
+    filepath = os.path.join(PROCESSED_DATA_DIR, filename)
     
     # Salva usando o caminho completo (não apenas o filename!)
     df.to_csv(filepath, index=index)  # ✅ Usa filepath, não filename
@@ -39,10 +39,10 @@ def save_to_csv_interim(df, filename: str, index=None):
         str: Caminho completo do arquivo salvo
     """
     # Garante que a pasta existe
-    os.makedirs(DATA_INTERIM, exist_ok=True)
+    os.makedirs(INTERIM_DATA_DIR, exist_ok=True)
     
     # Monta o caminho completo
-    filepath = os.path.join(DATA_INTERIM, filename)
+    filepath = os.path.join(INTERIM_DATA_DIR, filename)
     
     # Salva usando o caminho completo (não apenas o filename!)
     df.to_csv(filepath, index=index)  # ✅ Usa filepath, não filename
@@ -53,7 +53,7 @@ def save_to_csv_interim(df, filename: str, index=None):
 # Função adicional para carregar CSVs
 def load_from_csv_processed(filename: str, parse_dates: str = None):
     """
-    Carrega um CSV da pasta DATA_PROCESSED.
+    Carrega um CSV da pasta PROCESSED_DATA_DIR.
     
     Args:
         filename: Nome do arquivo
@@ -63,7 +63,7 @@ def load_from_csv_processed(filename: str, parse_dates: str = None):
         DataFrame do pandas
     """
     
-    filepath = os.path.join(DATA_PROCESSED, filename)
+    filepath = os.path.join(PROCESSED_DATA_DIR, filename)
     
     if not os.path.exists(filepath):
         raise FileNotFoundError(f"❌ Arquivo não encontrado: {filepath}")
@@ -77,7 +77,7 @@ def load_from_csv_processed(filename: str, parse_dates: str = None):
 # Função adicional para carregar CSVs
 def load_from_csv_raw(filename: str, parse_dates: str = None):
     """
-    Carrega um CSV da pasta DATA_PROCESSED.
+    Carrega um CSV da pasta RAW_DATA_PATH.
     
     Args:
         filename: Nome do arquivo
@@ -87,7 +87,7 @@ def load_from_csv_raw(filename: str, parse_dates: str = None):
         DataFrame do pandas
     """
     
-    filepath = os.path.join(DATA_RAW, filename)
+    filepath = os.path.join(RAW_DATA_PATH, filename)
     
     if not os.path.exists(filepath):
         raise FileNotFoundError(f"❌ Arquivo não encontrado: {filepath}")

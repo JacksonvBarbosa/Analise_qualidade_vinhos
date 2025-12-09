@@ -145,7 +145,7 @@ def grafo_dist_boxplot(df: pd.DataFrame, colunas: list):
         plt.tight_layout()
         plt.show()
 
-def grafo_bloco_boxplot(df: pd.DataFrame, colunas: list):
+def grafo_bloco_boxplot(df: pd.DataFrame, colunas: list, start=0):
     '''
     Gráficos de BoxPlot encadeados
 
@@ -156,12 +156,12 @@ def grafo_bloco_boxplot(df: pd.DataFrame, colunas: list):
     Return:
     Retorna os gráficos histograma e boxplot
     '''
-    # Box Plots
-    colunas = []
+    # # Box Plots
+    # colunas = []
 
     plt.figure(figsize=(14, 18))  # aumenta o tamanho para não ficar apertado
 
-    for i, coluna in enumerate(colunas, 1):
+    for i, coluna in enumerate(colunas, start):
         plt.subplot(6, 2, i)
         sns.boxplot(x=df[coluna], color='purple')
         plt.title(f'Boxplot - {coluna}')

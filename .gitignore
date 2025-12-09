@@ -1,3 +1,37 @@
+__pycache__/
+*.pyc
+*.pyo
+.DS_Store
+.pytest_cache/
+.ipynb_checkpoints/
+.venv/
+env/
+.env
+.vscode/
+.idea/
+*.joblib
+*.pkl
+
+# data artifacts
+data/processed/
+data/interim/
+data/production/
+models/
+models_storage/
+logs/
+reports/metrics.json
+reports/model_card.md
+reports/api_examples.md
+
+# build artifacts
+dist/
+build/
+
+# Jupyter
+*.nbconvert.ipynb
+
+# OS files
+Thumbs.db
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]

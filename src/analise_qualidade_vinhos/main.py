@@ -1,8 +1,15 @@
 
+"""
+Entry point to trigger training from the command line.
+Keeps things explicit for junior-level readability.
+"""
 
-# Insira as funções do seu projeto para que o Pipeline possa agira corretamente
+from analise_qualidade_vinhos.pipeline.train import cli
+
+
 def main():
-    print("OK")
+    cli()
+
 
 if __name__ == "__main__":
     main()

@@ -1,0 +1,49 @@
+version: '3.9'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: uvicorn src.analise_qualidade_vinhos.api:app --host 0.0.0.0 --port 8000 --reload
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./:/app
+      - ./models:/app/models
+      - ./data:/app/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  streamlit:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: streamlit run app.py --server.port 8501 --server.address 0.0.0.0
+    ports:
+      - "8501:8501"
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./:/app
+      - ./models:/app/models
+      - ./data:/app/data
+    depends_on:
+      - web
+
+# Opção: serviço de treino separado (executa o script de treino dentro do container)
+# train:
+#   build:
+#     context: .
+#     dockerfile: Dockerfile
+#   command: python -m analise_qualidade_vinhos.pipeline.train
+#   volumes:
+#     - ./:/app
+#     - ./models:/app/models
+#   environment:
+#     - PYTHONUNBUFFERED=1
