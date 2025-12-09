@@ -19,6 +19,7 @@ TEST_SIZE = 0.2
 TARGET_COLUMN = "quality_label"
 QUALITY_LABELS = [
     "Baixa qualidade",
+    "Média qualidade",
     "Alta qualidade",
 ]
 

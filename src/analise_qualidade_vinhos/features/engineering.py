@@ -7,10 +7,11 @@ from __future__ import annotations
 
 import pandas as pd
 
-QUALITY_THRESHOLD = 6  # >= 6 = Alta qualidade, < 6 = Baixa qualidade
+QUALITY_THRESHOLD = 6  # threshold used to separate quality bands
 
 TARGET_LABELS = {
     "low": "Baixa qualidade",
+    "medium": "Média qualidade",
     "high": "Alta qualidade",
 }
 
@@ -36,9 +37,16 @@ def rename_columns(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def bucket_quality(quality: float) -> str:
-    """Convert numeric quality into binary classification: Alta qualidade (>=6) or Baixa qualidade (<6)."""
-    if quality >= QUALITY_THRESHOLD:
+    """Bucket numeric quality into three labels:
+
+    - "low": quality < QUALITY_THRESHOLD
+    - "medium": quality == QUALITY_THRESHOLD
+    - "high": quality > QUALITY_THRESHOLD
+    """
+    if quality > QUALITY_THRESHOLD:
         return TARGET_LABELS["high"]
+    if quality == QUALITY_THRESHOLD:
+        return TARGET_LABELS["medium"]
     return TARGET_LABELS["low"]
 
 
