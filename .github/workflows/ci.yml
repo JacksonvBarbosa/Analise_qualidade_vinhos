@@ -92,8 +92,7 @@ jobs:
       - name: Verify package installation
         run: |
           echo "Workspace: $GITHUB_WORKSPACE"
-          python -c "import sys, importlib; print('sys.path[0:3]=', sys.path[0:3]); print('find_spec=', importlib.util.find_spec('analise_qualidade_vinhos'))"
-          python -c "import pkgutil; print('modules containing analise_qualidade_vinhos:', [m.name for m in pkgutil.iter_modules(['src']) if 'analise_qualidade_vinhos' in m.name or m.name=='analise_qualidade_vinhos'])"
+          python .github/scripts/verify_import.py
 
       - name: Run tests
         env:
