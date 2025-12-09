@@ -85,6 +85,18 @@ jobs:
           pip install poetry-core || true
           pip install -e .
 
+      - name: Add `src` to site-packages via .pth (fallback for imports)
+        run: |
+          python - <<'PY'
+            import sysconfig, pathlib, os
+            site_packages = pathlib.Path(sysconfig.get_paths()['purelib'])
+            pfile = site_packages / 'analise_qualidade_vinhos_src.pth'
+            content = str(pathlib.Path.cwd() / 'src') + os.linesep
+            pfile.write_text(content)
+            print('WROTE', pfile)
+            print('CONTENT:', content)
+          PY
+
       - name: Verify package installation
         run: |
           echo "Workspace: $GITHUB_WORKSPACE"
