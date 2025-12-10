@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import pandas as pd
 
-QUALITY_THRESHOLD = 6  # threshold used to separate quality bands
+QUALITY_THRESHOLD = 6  # Limiar usada para separar bandas de qualidade
 
 TARGET_LABELS = {
     "low": "Baixa qualidade",
@@ -51,7 +51,7 @@ def bucket_quality(quality: float) -> str:
 
 
 def create_interaction_features(df: pd.DataFrame) -> pd.DataFrame:
-    """Add engineered features that help tree-based models capture wine quality patterns."""
+    """Adiciona a engenharia de atributos que ajuda o modelo baseado em arvore para padrão de qualidade do vinho"""
     df = df.copy()
     
     # Ratios importantes para qualidade do vinho
@@ -100,14 +100,14 @@ def create_interaction_features(df: pd.DataFrame) -> pd.DataFrame:
 
 def build_feature_matrix(raw_df: pd.DataFrame, add_quality_label: bool = True) -> pd.DataFrame:
     """
-    Create the modeling table:
+    Cria o modelo da tabela:
     - clean column names
     - drop duplicates
     - engineer new features
     - add categorical quality bucket (target)
     """
     df = rename_columns(raw_df)
-    df = df.drop_duplicates()
+    df = df.drop_duplicates() # Como é para teste estou mantendo o dropduplicate
     df = create_interaction_features(df)
 
     if add_quality_label:

@@ -21,11 +21,9 @@ from analise_qualidade_vinhos.config.settings import (
     RAW_DATA_PATH,
     REPORTS_DIR,
     TARGET_COLUMN,
-    RANDOM_STATE,
 )
 from analise_qualidade_vinhos.data.dataset import load_featured_data, train_test_split_featured
 from analise_qualidade_vinhos.pipeline.model_builder import (
-    build_training_pipeline,
     build_best_pipeline,
 )
 

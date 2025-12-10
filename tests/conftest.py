@@ -1,7 +1,7 @@
 import sys
 from pathlib import Path
 
-# Ensure project's `src` is on sys.path for test discovery in CI
+# Certifique se a pasta (src) do projeto is na sys.path para o teste de descorberta do CI
 ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / "src"
 if str(SRC) not in sys.path:

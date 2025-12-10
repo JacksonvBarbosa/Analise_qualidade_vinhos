@@ -10,3 +10,4 @@ echo "Iniciando app Streamlit..."
 streamlit run app.py
 
 
+

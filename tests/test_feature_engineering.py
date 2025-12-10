@@ -4,7 +4,6 @@ from analise_qualidade_vinhos.features.engineering import (
     TARGET_LABELS,
     build_feature_matrix,
     bucket_quality,
-    rename_columns,
 )
 
 
