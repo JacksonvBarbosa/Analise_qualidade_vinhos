@@ -25,6 +25,7 @@ from analise_qualidade_vinhos.config.settings import (
 from analise_qualidade_vinhos.data.dataset import load_featured_data, train_test_split_featured
 from analise_qualidade_vinhos.pipeline.model_builder import (
     build_best_pipeline,
+    build_training_pipeline,
 )
 
 
